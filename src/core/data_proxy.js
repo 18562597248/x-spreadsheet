@@ -52,6 +52,8 @@ const defaultSettings = {
     format: 'normal',
   },
   zbbmData: {},
+  cellPro: {},
+  jizuData: '',
 };
 
 const toolbarHeight = 41;
@@ -302,14 +304,10 @@ export default class DataProxy {
   addValidation(mode, ref, validator) {
     // console.log('mode:', mode, ', ref:', ref, ', validator:', validator);
     this.changeData(() => {
-      const { ri, ci } = this.selector;
-      const isCz = this.validations.get(ri, ci);
-      if (isCz) {
-        const { range } = this.selector;
-        this.validations.remove(range);
-      }
+      const { range } = this.selector;
+      this.validations.remove(range);
       this.validations.add(mode, ref, validator);
-      this.rows.setListCell(ri, ci, validator);
+      this.rows.setListCell(range, validator);
     });
   }
 
@@ -317,23 +315,28 @@ export default class DataProxy {
     const { range } = this.selector;
     this.changeData(() => {
       this.validations.remove(range);
+      this.rows.deleteCells(range, 'text');
     });
   }
 
   addRightmenu(...args) {
     this.changeData(() => {
-      const { ri, ci } = this.selector;
-      const values = Object.assign({ ri, ci }, ...args);
-      let isCz = false;
-      for (let i = 0; i < this.rightMenus._.length; i++) {
-        const rec = this.rightMenus._[i];
-        if (rec.ri === ri && rec.ci === ci) {
-          this.rightMenus._.splice(i, 1, values);
-          isCz = true;
+      const {sri, sci, eri, eci} = this.selector.range;
+      for (let ri = sri; ri <= eri; ri += 1) {
+        for (let ci = sci; ci <= eci; ci += 1) {
+          const values = Object.assign({ ri, ci }, ...args);
+          let isCz = false;
+          for (let i = 0; i < this.rightMenus._.length; i++) {
+            const rec = this.rightMenus._[i];
+            if (rec.ri === ri && rec.ci === ci) {
+              this.rightMenus._.splice(i, 1, values);
+              isCz = true;
+            }
+          }
+          if (!isCz) {
+            this.rightMenus.add(values);
+          }
         }
-      }
-      if (!isCz) {
-        this.rightMenus.add(values);
       }
     });
   }
@@ -353,7 +356,10 @@ export default class DataProxy {
   getSelectedRightMenu() {
     const { ri, ci } = this.selector;
     const v = this.rightMenus.get(ri, ci);
-    const ret = Object.assign({}, v);
+    let ret = null;
+    if (v) {
+      ret = Object.assign({}, v);
+    }
     return ret;
   }
 

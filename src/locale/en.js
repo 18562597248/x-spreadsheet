@@ -122,6 +122,8 @@ export default {
       date: 'Date',
       phone: 'Phone',
       email: 'Email',
+      jizu: 'jizu',
+      sb: 'shebei',
     },
     operator: {
       be: 'between',
@@ -139,6 +141,14 @@ export default {
     headersType: {
       true: 'true',
       false: 'false',
+    },
+    jzOrSb: '机组或设备',
+    jzName: 'unit name',
+    sbName: 'equipment name',
+    jzOrSbType: {
+      no: ' ',
+      jz: 'unit',
+      sb: 'equipment',
     },
     zbbm: 'index name',
     datasource: 'datasource',

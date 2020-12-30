@@ -122,6 +122,8 @@ export default {
       date: '日期',
       phone: '手机号',
       email: '电子邮件',
+      jizu: '机组',
+      sb: '设备',
     },
     operator: {
       be: '在区间',
@@ -139,6 +141,14 @@ export default {
     headersType: {
       true: '是',
       false: '否',
+    },
+    jzOrSb: '机组或设备',
+    jzName: '机组名称',
+    sbName: '设备名称',
+    jzOrSbType: {
+      no: ' ',
+      jz: '机组',
+      sb: '设备',
     },
     zbbm: '指标描述',
     datasource: '数据源',
